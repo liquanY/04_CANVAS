@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>体验canvas绘图</title>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<!--1.准备画布-->
+<!--画布是白色的 默认是300*150-->
+<!--设置画布大小-->
+<canvas width="600" height="400"></canvas>
+<!--2.准备绘制工具-->
+<script>
+    // 获取元素
+    var myCanvas = document.querySelector('canvas');
+    // 获取绘制工具箱
+    var ctx = myCanvas.getContext('2d');
+    // 移动画笔
+    ctx.moveTo(100, 100);
+    // 绘制直线(轨迹 绘制路径)
+    ctx.lineTo(200, 100);
+    // 描边
+    ctx.stroke();
+</script>
+</body>
+</html>

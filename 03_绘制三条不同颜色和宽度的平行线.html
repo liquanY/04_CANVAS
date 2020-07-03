@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绘制三条不同颜色和宽度的平行线</title>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<canvas width="600" height="400"></canvas>
+<script>
+    var myCanvas = document.querySelector('canvas');
+    var ctx = myCanvas.getContext('2d');
+
+    // 蓝色 10px
+    ctx.beginPath();
+    ctx.moveTo(100, 100);
+    ctx.lineTo(300, 100);
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = 10;
+    ctx.stroke();
+
+    // 红色 20px
+    ctx.beginPath();
+    ctx.moveTo(100, 200);
+    ctx.lineTo(300, 200);
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 20;
+    ctx.stroke();
+
+    // 绿色 30px
+    ctx.beginPath();
+    ctx.moveTo(100, 300);
+    ctx.lineTo(300, 300);
+    ctx.strokeStyle = 'green';
+    ctx.lineWidth = 30;
+    ctx.stroke();
+</script>
+</body>
+</html>

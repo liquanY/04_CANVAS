@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<canvas width="600" height="400"></canvas>
+<script>
+    var myCanvas = document.querySelector('canvas');
+    var ctx = myCanvas.getContext('2d');
+
+    // 做对比的线
+    ctx.beginPath();
+    ctx.moveTo(100, 200.5);
+    ctx.lineTo(300, 200.5);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(100, 100.5);
+    ctx.lineTo(300, 100.5);
+    // 描述虚线的排列方式
+    ctx.setLineDash([10, 20, 30]);
+    // 获取虚线的排列方式
+    console.log(ctx.getLineDash());
+    // 偏移
+    ctx.lineDashOffset = -20;
+    ctx.stroke();
+</script>
+</body>
+</html>
