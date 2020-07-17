@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<canvas width="600" height="400"></canvas>
+<script>
+    var PieChart = function (ctx) {
+        // 绘制工具
+        this.ctx = ctx || document.querySelector('canvas').getContext('2d');
+        // 画布的宽高
+        this.w = this.ctx.canvas.width;
+        this.h = this.ctx.canvas.height;
+        // 饼图中心
+        this.x0 = this.w / 2 + 60;
+        this.y0 = this.h / 2;
+        // 饼图半径
+        this.radius = 150;
+        // 伸出去的线长度
+        this.outLine = 20;
+        // 说明矩形的宽高和间距
+        this.rectW = 30;
+        this.rectH = 16;
+        this.space = 10;
+    };
+
+    PieChart.prototype.init = function (data) {
+        this.drawPie(data);
+    };
+
+    PieChart.prototype.drawPie = function (data) {
+        var that = this;
+        // 转化弧度
+        var angleList = that.transformAngle(data);
+        // 绘制饼图
+        var startAngle = 0;
+        angleList.forEach(function (item, i) {
+            var endAngle = startAngle + item.angle;
+            that.ctx.beginPath();
+            that.ctx.moveTo(that.x0, that.y0);
+            that.ctx.arc(that.x0, that.y0, that.radius, startAngle, endAngle);
+            var color = that.getRandomColor();
+            that.ctx.fillStyle = color;
+            that.ctx.fill();
+            // 绘制标题
+            that.drawTitle(startAngle, item.angle, color, item.title);
+            // 绘制说明
+            that.drawDesc(i, item.title);
+            startAngle = endAngle;
+        });
+    };
+
+    PieChart.prototype.drawTitle = function (startAngle, angle, color, title) {
+        // 斜边
+        var edge = this.radius + this.outLine;
+        // x轴方向的直角边
+        var edgeX = Math.cos(startAngle + angle / 2) * edge;
+        // y轴方向的直角边
+        var edgeY = Math.sin(startAngle + angle / 2) * edge;
+        // 计算拐点坐标
+        var outX = this.x0 + edgeX;
+        var outY = this.y0 + edgeY;
+        // 绘制伸出去的线
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x0, this.y0);
+        this.ctx.lineTo(outX, outY);
+        this.ctx.strokeStyle = color;
+        // 画文字和下划线
+        this.ctx.font = '14px Microsoft YaHei';
+        var textWidth = this.ctx.measureText(title).width;
+        if (outX >= this.x0) {
+            // 横线往右画
+            this.ctx.lineTo(outX + textWidth, outY);
+            this.ctx.textAlign = 'left';
+        } else {
+            // 横线往左画
+            this.ctx.lineTo(outX - textWidth, outY);
+            this.ctx.textAlign = 'right';
+        }
+        this.ctx.textBaseline = 'bottom';
+        this.ctx.stroke();
+        this.ctx.fillText(title, outX, outY);
+    };
+
+    PieChart.prototype.drawDesc = function (index, title) {
+        this.ctx.fillRect(this.space, this.space + index * (this.rectH + this.space), this.rectW, this.rectH);
+        // 绘制文字
+        this.ctx.beginPath();
+        this.ctx.textAlign = 'left';
+        this.ctx.textBaseline = 'top';
+        this.ctx.font = '16px Microsoft YaHei';
+        this.ctx.fillText(title, this.space + this.rectW + this.space, this.space + index * (this.rectH + this.space));
+    };
+
+    PieChart.prototype.transformAngle = function (data) {
+        var total = 0;
+        data.forEach(function (item, i) {
+            total += item.num;
+        });
+        // 计算弧度 并且追加到当前的对象中
+        data.forEach(function (item, i) {
+            var angle = item.num / total * Math.PI * 2;
+            item.angle = angle;
+        });
+        return data;
+    };
+
+    PieChart.prototype.getRandomColor = function () {
+        var r = Math.floor(Math.random() * 256);
+        var g = Math.floor(Math.random() * 256);
+        var b = Math.floor(Math.random() * 256);
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    };
+
+    var data = [
+        {title: '15-20岁', num: 6},
+        {title: '20-25岁', num: 30},
+        {title: '25-30岁', num: 10},
+        {title: '30以上', num: 8}
+    ];
+
+    var pieChart = new PieChart();
+    pieChart.init(data);
+</script>
+</body>
+</html>
